@@ -1,0 +1,31 @@
+provider "aws" {
+  region     = "us-west-2"
+  access_key = "*************************"
+  secret_key = "***************************************"
+}
+
+resource "aws_instance" "prodevans-rocks-sai" {
+  ami  = "ami-013a129d325529d4d"
+  instance_type = "t2.micro"
+  key_name= "demokey"
+  vpc_security_group_ids = [aws_security_group.main.id]
+
+  tags = {
+    Name = "prodevans-rocks-sai"
+  }
+
+
+
+}
+
+resource "aws_security_group" "main" {
+  description = "Allow limited inbound external traffic"
+  name        = "terraform_ec2_private_sg"
+
+  ingress {
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 22
+    to_port     = 22
+  }
+}

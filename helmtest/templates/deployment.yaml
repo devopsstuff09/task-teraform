@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name | lower | replace "_" "-" }}
+  namespace: {{ .Values.namespace | lower }}
+  labels:
+    app: {{ .Values.appname |  lower | replace "_" "-" }} 
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.appname |  lower | replace "_" "-" }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.appname |  lower | replace "_" "-" }}
+    spec:
+      containers:
+        - name: {{ .Values.appname |  lower | replace "_" "-" }}
+          imagePullPolicy: Always
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: nginx
+              mountPath: /usr/share/nginx/html
+      volumes:
+        - name: nginx
+          configMap:
+        - name:   nginx-configmap
+      imagePullSecrets:
+        - name: {{ .Values.image.pullSecrets }}

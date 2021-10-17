@@ -1,0 +1,10 @@
+image:
+  repository: nginx
+  tag: "latest"
+  pullPolicy: Always
+replicaCount: 4
+appname: centralize_website
+namespace: helmtest
+service:
+  type: LoadBalancer
+  port: 80
